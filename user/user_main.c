@@ -9,7 +9,6 @@
  * ----------------------------------------------------------------------------
  */
 
-
 #include "espmissingincludes.h"
 #include "ets_sys.h"
 #include "osapi.h"
@@ -19,6 +18,7 @@
 #include "cgi.h"
 #include "cgiwifi.h"
 #include "stdout.h"
+#include "dnsserver.h"
 
 HttpdBuiltInUrl builtInUrls[]={
 	{"/", cgiRedirect, "/index.tpl"},
@@ -34,6 +34,8 @@ HttpdBuiltInUrl builtInUrls[]={
 	{"/wifi/wifi.tpl", cgiEspFsTemplate, tplWlan},
 	{"/wifi/connect.cgi", cgiWiFiConnect},
 
+	{"/generate_204", cgiRedirect, "/index.tpl"},
+
 	{"*", cgiEspFsHook, NULL}, //Catch-all cgi function for the filesystem
 	{NULL, NULL, NULL}
 };
@@ -43,5 +45,6 @@ void user_init(void) {
 	stdoutInit();
 	ioInit();
 	httpdInit(builtInUrls, 80);
+	dnsserver_init();
 	os_printf("\nReady\n");
 }
